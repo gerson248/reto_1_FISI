@@ -19,6 +19,65 @@ enrutador.get( "/mentores", (req, res) => {
     });
 
 });
+enrutador.post("/mentores", (req, res) => {
+    var input = JSON.parse(JSON.stringify(req.body));
+    req.getConnection((err, con) => {
+        var data = {
+            codigo          : input.codigo,
+            nombre          : input.nombre,
+            apellido        : input.apellido,
+            nivel           : input.nivel,
+            hoja_vida       : input.hoja_vida
+        };
+        con.query('INSERT INTO mentor set ? ', data,(err, mentores) => {
+            if (err) console.log(err);
+            res.redirect('/')
+        });
+    });
+});
+enrutador.delete("/mentores/(:id)", (req, res) => {
+    var mentor = { id: req.params.id }
+
+    req.getConnection((err, con) => {
+        con.query('DELETE FROM mentor WHERE codigo = ' + req.params.id, mentor,(err, mentores) => {
+            if (err) console.log(err);
+            res.redirect('/')
+        });
+    });
+});
+enrutador.put("/mentores/:id", (req, res) => {
+    var input = JSON.parse(JSON.stringify(req.body));
+    var codigo = req.params.id;
+
+    req.getConnection((err, con) => {
+        var data = {
+            nombre          : input.nombre,
+            apellido        : input.apellido,
+            nivel           : input.nivel,
+            hoja_vida       : input.hoja_vida
+        };
+        con.query("UPDATE mentor set ? WHERE codigo = ? ",[data,codigo], (err, mentores) => {
+            if (err) console.log(err);
+            res.redirect('/')
+        });
+    });
+});
+enrutador.put("/mentores/save", (req, res) => {
+    var input = JSON.parse(JSON.stringify(req.body));
+    req.getConnection((err, con) => {
+        var data = {
+            codigo          : input.codigo,
+            nombre          : input.nombre,
+            apellido        : input.apellido,
+            nivel           : input.nivel,
+            hoja_vida       : input.hoja_vida
+        };
+        con.query('INSERT INTO mentor set ? ', data,(err, mentores) => {
+            if (err) console.log(err);
+            res.redirect('/')
+        });
+    });
+});
 enrutador.get( "/mentoria", (req, res) => {
     req.getConnection((err, con) => {
         con.query('SELECT * FROM alumno', (err, mentoria) => {

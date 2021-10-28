@@ -1,8 +1,15 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser')
 const mysql = require( 'mysql');
 const myConnection = require('express-myconnection');
 const enrutador = require("./routes/rutas");
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 //Configuraciones
 app.set('puerto',3000);
@@ -50,5 +57,5 @@ const urlencodedParser = express.urlencoded({extended: false});
 app.use('/', enrutador);
 
 app.listen(app.get('puerto'), () =>{
-    console.log('Server...');
+    console.log('Server localhost:3000');
 });
